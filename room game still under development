@@ -1,0 +1,160 @@
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.bag = []
+
+    def add_item(self, item):
+        if len(self.bag) < 4:
+            self.bag.append(item)
+            print(f"{item} added to your bag.")
+        else:
+            print("Your bag is full!")
+
+    def display_bag(self):
+        print("Items in your bag:", self.bag)
+
+
+class Game:
+    def __init__(self):
+        self.current_position = 'Start'
+        self.positions = {
+            'Start': {
+                'description': 'You are at the starting point.',
+                'choices': ['move forward', 'look around'],
+                'items': ['key'],
+                'next': 'Room1',
+                'previous': None
+            },
+            'Room1': {
+                'description': 'You are in Room 1.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['map'],
+                'next': 'Room2',
+                'previous': 'Start'
+            },
+            'Room2': {
+                'description': 'You are in Room 2.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['torch'],
+                'next': 'Room3',
+                'previous': 'Room1'
+            },
+            'Room3': {
+                'description': 'You are in Room 3.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['potion'],
+                'next': 'Room4',
+                'previous': 'Room2'
+            },
+            'Room4': {
+                'description': 'You are in Room 4.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['sword'],
+                'next': 'Room5',
+                'previous': 'Room3'
+            },
+            'Room5': {
+                'description': 'You are in Room 5.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['food'],
+                'next': 'Room6',
+                'previous': 'Room4'
+            },
+            'Room6': {
+                'description': 'You are in Room 6.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['gun'],
+                'next': 'Room7',
+                'previous': 'Room5'
+            },
+            'Room7': {
+                'description': 'You are in Room 7.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['food'],
+                'next': 'Room8',
+                'previous': 'Room6'
+            },
+            'Room8': {
+                'description': 'You are in Room 8.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['water'],
+                'next': 'Room9',
+                'previous': 'Room7'
+            },
+            'Room9': {
+                'description': 'You are in Room 9.',
+                'choices': ['move forward', 'move back', 'look around'],
+                'items': ['laptop'],
+                'next': 'Room10',
+                'previous': 'Room8'
+            },
+            'Room10': {
+                'description': 'You are in Room 10. You see a door.',
+                'choices': ['move forward','move back', 'look around'],
+                'items': [],
+                'next': 'use the key ',
+                'previous': 'Room9'
+            }
+        }
+
+    def display_choices(self):
+        position_info = self.positions[self.current_position]
+        print(position_info['description'])
+        print("Choices:", position_info['choices'])
+
+    def move(self, direction):
+        position_info = self.positions[self.current_position]
+        if direction == 'forward' and position_info['next']:
+            self.current_position = position_info['next']
+        elif direction == 'back' and position_info['previous']:
+            self.current_position = position_info['previous']
+        else:
+            print("You can't move in that direction.")
+
+        if self.current_position == 'Room10':
+            self.handle_room10_interaction()
+
+    def handle_room10_interaction(self):
+        print('There is a person blocking the door. Do you want to talk to them? (yes/no)')
+        response = input().strip().lower()
+        if response == 'yes':
+            print('Move please.')
+        elif response == 'no':
+            print('I\'m going to use the sword.')
+        else:
+            print(" Invalid response. Please answer with 'yes' or 'no'.")
+
+    def interact(self, player):
+        position_info = self.positions[self.current_position]
+        if position_info['items']:
+            item = position_info['items'].pop(0)  # Pick up the first item
+            player.add_item(item)
+        else:
+            print("There are no items to pick up here.")
+
+
+def main():
+    player_name = input("Enter your character's name: ")
+    player = Player(player_name)
+    game = Game()
+
+    while True:
+        game.display_choices()
+        choice = input("What do you want to do? ").strip().lower()
+
+        if choice == "move forward":
+            game.move('forward')
+        elif choice == "move back":
+            game.move('back')
+        elif choice == "look around":
+            game.interact(player)
+        elif choice == "check bag":
+            player.display_bag()
+        elif choice == "quit":
+            print("Thanks for playing!")
+            break
+        else:
+            print("Invalid choice.")
+
+
+main() 
