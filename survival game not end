@@ -1,0 +1,121 @@
+import random
+import time
+
+def ask_play_again(): #this is a function that asks the player if they want to play again
+    while True: #this is a loop that asks the player if they want to play again
+        play_again = input("Do you want to play again? (y/n): ") #this is the code that asks the player if they want to play again
+        if play_again.lower() == 'n': #this is the code that checks if the player wants to play again
+            print("Thank you for playing!") #this is the code that prints the thank you message
+            break #this is the code that breaks the loop
+        elif play_again.lower() == 'y': #this is the code that checks if the player wants to play again
+            game() #this is the code that starts the game
+        else: #this is the code that prints the invalid input message
+            print("Invalid input. Please enter 'y' or 'n'.") #this is the code that prints the invalid input message
+
+def print_slow(text):#this is a function that prints the text slowly
+    for char in text: #this is a loop that prints the text character by character
+        print(char, end='', flush=True) #this is the code that prints the text character by character
+        time.sleep(0.03) #this is the code that makes the text print slowly
+    print() #this is the code that prints a new line
+
+class Player: #this is a class that represents the player
+    def __init__(self): #this is the constructor for the class
+        self.inventory = [] #this is the inventory of the player
+        self.health = 100 #this is the health of the player
+        self.food = 100 #this is the food of the player
+
+def game(): #this is a function that starts the game
+    player = Player() #this is the player object
+    locations = ['forest', 'abandoned house', 'cave', 'river', 'meadow'] #this is the list of locations
+    animals = ['deer', 'rabbit', 'wild boar', 'fox'] #this is the list of animals
+    weapons = ['rifle', 'bow', 'knife'] #this is the list of weapons
+    plants = ['berries', 'mushrooms', 'herbs'] #this is the list of plants
+    
+    print_slow("Welcome to the Survival Game!") #this is the code that prints the welcome message
+    print_slow("Your goal is to survive, gather food, and make it back home.") #this is the code that prints the goal of the game
+    
+    # Give player initial weapon
+    player.inventory.append(random.choice(weapons)) #this is the code that gives the player an initial weapon
+    print_slow(f"\nYou start with a {player.inventory[0]}.") #this is the code that prints the initial weapon   
+    
+    while player.health > 0 and player.food > 0:
+        current_location = random.choice(locations)
+        print_slow(f"\nYou are in the {current_location}.") #this is the code that prints the current location      
+        
+        choice = input("\nWhat would you like to do?\n1. Search for animals\n2. Gather plants\n3. Look for weapons\n4. Check inventory\n5. Head home\nChoice: ")
+        
+        if choice == '1':
+            animal = random.choice(animals)
+            print_slow(f"You encountered a {animal}!") #this is the code that prints the animal encountered
+            if any(weapon in player.inventory for weapon in weapons): #this is the code that checks if the player has any weapons
+                if random.random() > 0.3:  # 70% chance to hunt successfully
+                    print_slow(f"You successfully hunted the {animal}!") #this is the code that prints the successful hunt
+                    player.inventory.append(f"{animal} meat") #this is the code that adds the animal meat to the player's inventory
+                    player.food += 30 #this is the code that adds 30 food to the player's food
+                else:
+                    print_slow("The hunt was unsuccessful.") #this is the code that prints the unsuccessful hunt
+                    player.food -= 10 #this is the code that subtracts 10 food from the player's food
+            else:
+                print_slow("You don't have any weapons to hunt with!") #this is the code that prints the message if the player doesn't have any weapons
+                
+        elif choice == '2':
+            plant = random.choice(plants)
+            print_slow(f"You found some {plant}!") #this is the code that prints the plant found    
+            player.inventory.append(plant) #this is the code that adds the plant to the player's inventory
+            player.food += 15 #this is the code that adds 15 food to the player's food
+            
+        elif choice == '3':
+            if random.random() > 0.5:  # 50% chance to find weapon
+                new_weapon = random.choice(weapons)
+                print_slow(f"You found a {new_weapon}!") #this is the code that prints the new weapon found 
+                player.inventory.append(new_weapon) #this is the code that adds the new weapon to the player's inventory
+            else:
+                print_slow("You couldn't find any weapons here.") #this is the code that prints the message if the player couldn't find any weapons
+                
+        elif choice == '4':
+            print_slow("\nYour inventory:")
+            for item in player.inventory:
+                print_slow(f"- {item}") #this is the code that prints the inventory
+            print_slow(f"\nHealth: {player.health}") #this is the code that prints the player's health
+            print_slow(f"Food: {player.food}") #this is the code that prints the player's food
+            
+        elif choice == '5':
+            print_slow("\nYou are heading home...") #this is the code that prints the message if the player is heading home
+            if player.food >= 50:
+
+                print_slow("\nCongratulations! You've made it back home safely with enough supplies!") #this is the code that prints the message if the player has enough food
+                break #this is the code that breaks the loop
+            else:
+                
+                print_slow("\nYou don't have enough food to make it home yet!") #this is the code that prints the message if the player doesn't have enough food
+                
+        player.food -= 5  # Decrease food with each action
+        print_slow(f"Food: {player.food}") #this is the code that prints the player's food
+
+        
+        if player.food <= 0:
+
+            print_slow("\nYou've run out of food! Game Over!") #this is the code that prints the message if the player runs out of food
+        
+if __name__ == "__main__":
+        
+    game()
+      
+    print("Game Over!") #this is the code that prints the game over message
+    print("Thank you for playing!") #this is the code that prints the thank you message
+    while True:#this is a loop that asks the player if they want to play again  
+        play_again = input("Do you want to play again? (y/n): ")
+        if play_again.lower() == 'n':
+            print("Thank you for playing!") #this is the code that prints the thank you message
+            break
+        elif play_again.lower() == 'y':
+            game()
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.") #this is the code that prints the invalid input message    
+
+if __name__ == "__main__":
+    game()
+    print("Game Over!") #this is the code that prints the game over message
+    print("Thank you for playing!") #this is the code that prints the thank you message         
+    ask_play_again() #this is the code that calls the ask_play_again function   
+    
