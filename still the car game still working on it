@@ -1,0 +1,88 @@
+import random
+
+# Initialize game state
+player = {
+    "money": 1000,
+    "inventory": []
+}
+
+# Available cars
+cars = ["Honda Civic", "Toyota Corolla", "Ford Mustang", "Tesla Model S"]
+
+# Car prices
+car_prices = {
+    "Honda Civic": 500,
+    "Toyota Corolla": 600,
+    "Ford Mustang": 1000,
+    "Tesla Model S": 1500
+}
+
+def display_status():
+    print(f"\nMoney: ${player['money']}")
+    print("Inventory:", player['inventory'])
+    print()
+
+def buy_car():
+    print("\nAvailable cars for purchase:")
+    for car, price in car_prices.items():
+        print(f"{car}: ${price}")
+    choice = input("\nWhich car would you like to buy? ")
+    if choice in car_prices and player["money"] >= car_prices[choice]:
+        player["money"] -= car_prices[choice]
+        player["inventory"].append(choice)
+        print(f"You bought a {choice}!")
+    else:
+        print("Invalid choice or not enough money.")
+    display_status()
+
+def sell_car():
+    print("\nYour cars:")
+    for car in player["inventory"]:
+        print(car)
+    choice = input("\nWhich car would you like to sell? ")
+    if choice in player["inventory"]:
+        player["money"] += car_prices[choice] // 2  # Sell for half the price
+        player["inventory"].remove(choice)
+        print(f"You sold your {choice}!")
+    else:
+        print("Invalid choice or you do not own that car.")
+    display_status()
+
+def do_mission():
+    reward = random.randint(100, 500)
+    player["money"] += reward
+    print(f"\nYou completed a mission and earned ${reward}!")
+    display_status()
+
+def steal_car():
+    stolen_car = random.choice(cars)
+    player["inventory"].append(stolen_car)
+    print(f"\nYou stole a {stolen_car}!")
+    display_status()
+
+def main():
+    while True:
+        print("Choose an action:")
+        print("1. Buy a car")
+        print("2. Sell a car")
+        print("3. Do a mission")
+        print("4. Steal a car")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            buy_car()
+        elif choice == "2":
+            sell_car()
+        elif choice == "3":
+            do_mission()
+        elif choice == "4":
+            steal_car()
+        elif choice == "5":
+            print("Thanks for playing!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
